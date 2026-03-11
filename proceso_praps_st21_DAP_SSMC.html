@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-SAF-001 | Proceso PRAPS Subtítulo 21 – DAP SSMC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy: #0a1628;
+    --blue: #1a3a6b;
+    --mid: #2563b0;
+    --accent: #3b82f6;
+    --cyan: #06b6d4;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --gray-dark: #1e293b;
+    --gray-mid: #334155;
+    --gray-soft: #475569;
+    --border: #1e3a5f;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --white: #f8fafc;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    background: linear-gradient(135deg, #0d1f3c 0%, #0a1628 60%, #071020 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 0;
+  }
+  .header-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .logo-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mid), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #fff;
+    box-shadow: 0 0 20px rgba(59,130,246,0.4);
+  }
+  .logo-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-title { text-align: center; }
+  .org-name { font-size: 11px; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .doc-title { font-size: 22px; font-weight: 700; color: var(--white); line-height: 1.2; }
+  .doc-subtitle { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+  .header-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-align: right;
+  }
+  .meta-label { color: var(--text-dim); }
+  .meta-val { color: var(--accent); font-weight: 500; }
+
+  .header-info {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .info-cell {
+    padding: 10px 16px;
+    border-right: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .info-cell:last-child { border-right: none; }
+  .info-cell .lbl { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; font-size: 9px; margin-bottom: 3px; }
+  .info-cell .val { color: var(--white); font-weight: 600; font-size: 12px; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 160px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: #0d1f3c;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-section { margin-bottom: 28px; }
+  .sidebar-title {
+    font-size: 9px; font-weight: 600; color: var(--text-dim);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 0 20px 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    font-size: 12px; color: var(--text-dim);
+  }
+  .nav-item:hover, .nav-item.active {
+    background: rgba(59,130,246,0.08);
+    border-left-color: var(--accent);
+    color: var(--white);
+  }
+  .nav-item .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-item { padding: 6px 20px; display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text-dim); }
+  .legend-box { width: 20px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── CONTENT ── */
+  .content { padding: 32px 40px; overflow-x: auto; }
+
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; margin-top: 36px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.3);
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--white); }
+
+  /* ── PURPOSE / SCOPE CARDS ── */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+  .info-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .info-card .ic-title { font-size: 10px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .info-card p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── ACTORS TABLE ── */
+  .actors-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 12px; }
+  .actors-table th {
+    background: rgba(37,99,176,0.2);
+    color: var(--cyan);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .actors-table td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+  .actors-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .actor-name { color: var(--white); font-weight: 600; font-size: 12px; }
+  .actor-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 20px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  }
+
+  /* ── SWIMLANE DIAGRAM ── */
+  .diagram-wrap { overflow-x: auto; padding-bottom: 16px; }
+  .swimlane-container {
+    min-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .swimlane {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    border: 1px solid var(--border);
+    border-bottom: none;
+  }
+  .swimlane:last-child { border-bottom: 1px solid var(--border); }
+
+  .lane-label {
+    background: rgba(37,99,176,0.15);
+    border-right: 1px solid var(--border);
+    padding: 12px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    gap: 6px;
+    min-height: 100px;
+  }
+  .lane-icon { font-size: 20px; }
+  .lane-name { font-size: 10px; font-weight: 700; color: var(--white); line-height: 1.3; letter-spacing: 0.3px; }
+  .lane-unit { font-size: 9px; color: var(--text-dim); line-height: 1.3; }
+
+  .lane-content {
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  /* ── PROCESS NODES ── */
+  .node-group { display: flex; align-items: flex-start; gap: 8px; }
+  .arrow { align-self: center; color: var(--text-dim); font-size: 18px; margin: 0 2px; flex-shrink: 0; }
+  .arrow-down { display: block; text-align: center; color: var(--accent); font-size: 20px; margin: 4px auto; }
+
+  .node {
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: 160px;
+    min-width: 120px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid;
+  }
+  .node:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .node .node-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 400;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+  .node .node-text { color: var(--white); }
+
+  /* Node types */
+  .node-start {
+    background: linear-gradient(135deg, #064e3b, #065f46);
+    border-color: var(--green);
+    border-radius: 20px;
+  }
+  .node-end {
+    background: linear-gradient(135deg, #450a0a, #7f1d1d);
+    border-color: var(--red);
+    border-radius: 20px;
+  }
+  .node-task {
+    background: linear-gradient(135deg, #1e3a5f, #1a3268);
+    border-color: var(--accent);
+  }
+  .node-decision {
+    background: linear-gradient(135deg, #451a03, #78350f);
+    border-color: var(--amber);
+    border-radius: 0;
+    transform: rotate(0deg);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    width: 100px; height: 80px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8px;
+    min-width: 100px;
+  }
+  .node-doc {
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    border-color: var(--purple);
+    border-bottom-left-radius: 0;
+  }
+  .node-doc::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 14px; height: 14px;
+    background: var(--navy);
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+  }
+  .node-check {
+    background: linear-gradient(135deg, #0c4a6e, #075985);
+    border-color: var(--cyan);
+  }
+  .node-system {
+    background: linear-gradient(135deg, #14532d, #166534);
+    border-color: var(--green);
+    border-style: dashed;
+  }
+
+  /* ── PHASE BANNER ── */
+  .phase-banner {
+    width: 100%;
+    padding: 6px 20px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .phase-banner::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+
+  /* ── VERTICAL FLOW ── */
+  .vflow { display: flex; flex-direction: column; gap: 0; width: 100%; }
+
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid rgba(30,58,95,0.5);
+    padding: 12px 0;
+  }
+  .flow-row:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 4px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-right: 12px;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  .step-content { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .step-desc { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+  .step-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .tag {
+    font-size: 9px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-resp { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+  .tag-doc  { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+  .tag-sys  { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .tag-norm { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .tag-ctrl { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+  .step-aside {
+    width: 200px;
+    flex-shrink: 0;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .step-aside .aside-title { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); margin-bottom: 4px; }
+
+  /* ── DECISION BOX ── */
+  .decision-box {
+    background: linear-gradient(135deg, rgba(120,53,15,0.3), rgba(69,26,3,0.4));
+    border: 1.5px solid var(--amber);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-size: 11px;
+  }
+  .decision-box .dq { color: var(--amber); font-weight: 700; margin-bottom: 6px; }
+  .decision-box .dyes { color: var(--green); }
+  .decision-box .dno  { color: var(--red); }
+
+  /* ── CONNECTOR ── */
+  .connector {
+    display: flex; align-items: center;
+    padding: 4px 0 4px 40px;
+    font-size: 10px; color: var(--text-dim);
+    gap: 8px;
+  }
+  .connector::before {
+    content: '';
+    width: 1px;
+    height: 24px;
+    background: var(--accent);
+    display: block;
+    margin-right: 8px;
+  }
+
+  /* ── MINI DIAGRAMA VISUAL ── */
+  .visual-flow {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    align-items: stretch;
+    padding: 20px 0;
+  }
+  .vf-phase {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 160px;
+    padding: 0 12px;
+    border-right: 1px dashed var(--border);
+  }
+  .vf-phase:last-child { border-right: none; }
+  .vf-phase-title {
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; text-align: center;
+    padding: 4px 0;
+  }
+  .vf-node {
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--white);
+    border: 1px solid;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── INDICATORS ── */
+  .indicators-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .ind-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .ind-card .ind-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 6px; }
+  .ind-card .ind-name { font-size: 12px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+  .ind-card .ind-formula { font-size: 11px; color: var(--cyan); margin-bottom: 8px; font-style: italic; }
+  .ind-card .ind-meta { font-size: 10px; color: var(--text-dim); }
+
+  /* ── RISKS ── */
+  .risks-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .risks-table th {
+    background: rgba(37,99,176,0.2); color: var(--cyan);
+    font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 8px 12px; border: 1px solid var(--border); text-align: left;
+  }
+  .risks-table td { padding: 8px 12px; border: 1px solid var(--border); color: var(--text-dim); }
+  .risks-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .pill {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+  }
+  .pill-high { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .pill-med  { background: rgba(245,158,11,0.2); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-low  { background: rgba(16,185,129,0.2); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: #0d1f3c;
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── REVISION TABLE ── */
+  .rev-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .rev-table th { background: rgba(37,99,176,0.2); color: var(--cyan); font-size: 10px; padding: 8px 12px; border: 1px solid var(--border); text-align: left; letter-spacing: 1px; text-transform: uppercase; }
+  .rev-table td { padding: 8px 12px; border: 1px solid var(--border); color: var(--text-dim); }
+
+  /* Scroll behavior */
+  html { scroll-behavior: smooth; }
+  section { scroll-margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<div class="doc-header">
+  <div class="header-top">
+    <div class="logo-area">
+      <div class="logo-circle">DAP</div>
+      <span class="logo-label">SSMC</span>
+    </div>
+    <div class="header-title">
+      <div class="org-name">Servicio de Salud Metropolitano Central · Dirección de Atención Primaria</div>
+      <div class="doc-title">Procedimiento: Gestión Presupuestaria y Rendición de Recursos PRAPS — Subtítulo 21</div>
+      <div class="doc-subtitle">Sistema Integrado de Calidad · Subdireccion de Administración y Finanzas / Subdirección de Gestión y Desarrollo de Personas</div>
+    </div>
+    <div class="header-meta">
+      <span class="meta-label">Código:</span><span class="meta-val">PRO-SAF-001</span>
+      <span class="meta-label">Versión:</span><span class="meta-val">1.0</span>
+      <span class="meta-label">Vigencia:</span><span class="meta-val">2025</span>
+      <span class="meta-label">Páginas:</span><span class="meta-val">1 de 1</span>
+    </div>
+  </div>
+  <div class="header-info">
+    <div class="info-cell">
+      <div class="lbl">Proceso Padre</div>
+      <div class="val">Gestión Financiera APS</div>
+    </div>
+    <div class="info-cell">
+      <div class="lbl">Tipo de documento</div>
+      <div class="val">Procedimiento Operativo</div>
+    </div>
+    <div class="info-cell">
+      <div class="lbl">Elaborado por</div>
+      <div class="val">Subdep. Convenios</div>
+    </div>
+    <div class="info-cell">
+      <div class="lbl">Revisado por</div>
+      <div class="val">Depto. Jurídica SSMC</div>
+    </div>
+    <div class="info-cell">
+      <div class="lbl">Aprobado por</div>
+      <div class="val">Subdirección AGDP</div>
+    </div>
+    <div class="info-cell">
+      <div class="lbl">Clasificación</div>
+      <div class="val">Uso Interno</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ LAYOUT ══════════════════ -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Navegación</div>
+      <div class="nav-item active" onclick="scrollTo('s1')"><div class="dot" style="background:var(--cyan)"></div>1. Objeto y Alcance</div>
+      <div class="nav-item" onclick="scrollTo('s2')"><div class="dot" style="background:var(--accent)"></div>2. Actores y Responsables</div>
+      <div class="nav-item" onclick="scrollTo('s3')"><div class="dot" style="background:var(--purple)"></div>3. Diagrama de Fases</div>
+      <div class="nav-item" onclick="scrollTo('s4')"><div class="dot" style="background:var(--green)"></div>4. Descripción del Proceso</div>
+      <div class="nav-item" onclick="scrollTo('s5')"><div class="dot" style="background:var(--amber)"></div>5. Puntos de Control</div>
+      <div class="nav-item" onclick="scrollTo('s6')"><div class="dot" style="background:var(--red)"></div>6. Riesgos y Controles</div>
+      <div class="nav-item" onclick="scrollTo('s7')"><div class="dot" style="background:var(--cyan)"></div>7. Indicadores</div>
+      <div class="nav-item" onclick="scrollTo('s8')"><div class="dot" style="background:var(--text-dim)"></div>8. Historial de Revisiones</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Simbología</div>
+      <div class="legend-item"><div class="legend-box" style="background:#065f46;border:1.5px solid var(--green);border-radius:20px"></div>Inicio / Fin</div>
+      <div class="legend-item"><div class="legend-box" style="background:#1a3268;border:1.5px solid var(--accent)"></div>Tarea / Actividad</div>
+      <div class="legend-item"><div class="legend-box" style="background:#78350f;border:1.5px solid var(--amber)"></div>Decisión / Compuerta</div>
+      <div class="legend-item"><div class="legend-box" style="background:#312e81;border:1.5px solid var(--purple)"></div>Documento / Resolución</div>
+      <div class="legend-item"><div class="legend-box" style="background:#075985;border:1.5px solid var(--cyan)"></div>Control / Validación</div>
+      <div class="legend-item"><div class="legend-box" style="background:#166534;border:1.5px dashed var(--green)"></div>Sistema Externo</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Acrónimos</div>
+      <div style="padding:0 20px;font-size:10px;color:var(--text-dim);line-height:2">
+        <b style="color:var(--white)">PRAPS</b> – Prog. Reforzamiento APS<br>
+        <b style="color:var(--white)">DAP</b> – Dirección Atención Primaria<br>
+        <b style="color:var(--white)">SSMC</b> – SS Metropolitano Central<br>
+        <b style="color:var(--white)">SAF</b> – Subdirección Adm. y Finanzas<br>
+        <b style="color:var(--white)">AGDP</b> – Subdirección Gestión y Desarrollo de Personas<br>
+        <b style="color:var(--white)">PPI</b> – Programa Pago Individual<br>
+        <b style="color:var(--white)">ST21</b> – Subtítulo 21 Remuneraciones<br>
+        <b style="color:var(--white)">SISREC</b> – Sist. Rendición Electrónica<br>
+        <b style="color:var(--white)">SIGFE</b> – Sist. Información para Gestión Financiera del Estado<br>
+        <b style="color:var(--white)">DIVAP</b> – Div. Atención Primaria MINSAL
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ─── 1. OBJETO Y ALCANCE ─── -->
+    <section id="s1">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">Objeto, Alcance y Marco Normativo</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">🎯 Objeto</div>
+          <p>Establecer la metodología y responsabilidades para la asignación, formalización y rendición de recursos PRAPS del Subtítulo 21 (Remuneraciones) transferidos desde el SSMC a la DAP SSMC, desde la resolución ministerial de distribución hasta el cierre de la rendición en SISREC.</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">📐 Alcance</div>
+          <p>Aplica a todas las unidades de la DAP SSMC que participen en la gestión presupuestaria del ST21 con cargo a programas PRAPS: Subdep. Convenios, Unidad Control Presupuesto ST21, Unidad de Rendiciones y Referentes Técnicos de la Subdirección Médica.</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">📜 Marco Normativo</div>
+          <p>Ley 19.378 (Estatuto APS) · Ley de Presupuesto del Sector Público (anual) · DFL N°1/2005 MINSAL · Resolución Exenta MINSAL distribución recursos PRAPS · Normas técnicas DIVAP · Instructivos de rendición SISREC · Ley N°19.880</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 2. ACTORES ─── -->
+    <section id="s2">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">Actores, Roles y Responsabilidades</span>
+      </div>
+      <table class="actors-table">
+        <thead>
+          <tr>
+            <th>Actor / Unidad</th>
+            <th>Nombre(s)</th>
+            <th>Rol en el Proceso</th>
+            <th>Autoridad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="actor-name">MINSAL – DIVAP</span><br><span style="font-size:10px;color:var(--text-dim)">Nivel Central</span></td>
+            <td>Referentes Técnicos Nacionales</td>
+            <td>Emite Resolución de Distribución de Recursos PRAPS. Publica orientaciones técnicas y bases del programa. Define metas e indicadores.</td>
+            <td><span class="actor-badge" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)">NORMATIVA</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">SSMC – Depto. Jurídica</span></td>
+            <td>Departamento Jurídico SSMC</td>
+            <td>Revisa y visa jurídicamente las Resoluciones de Traspaso de Recursos antes de su firma por autoridad del Servicio.</td>
+            <td><span class="actor-badge" style="background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.3)">APROBACIÓN JURÍDICA</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">Subdep. Convenios DAP SAF</span></td>
+            <td><b>Liliana Nahuel</b><br><b>Alex Durán</b></td>
+            <td>Elaboran las Resoluciones de Traspaso de Recursos (PRAPS). Coordinan con AGDP la nómina de personal. Gestionan el flujo documental hacia Jurídica y hacia la plataforma SISREC.</td>
+            <td><span class="actor-badge" style="background:rgba(59,130,246,0.15);color:var(--accent);border:1px solid rgba(59,130,246,0.3)">ELABORACIÓN</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">Unid. Control Presupuesto ST21 AGDP DAP</span></td>
+            <td><b>Alexis Vergara</b></td>
+            <td>Determina el gasto anual por persona/programa. Clasifica haberes (Haber Neto → PRAPS; Haberes No Permanentes → PPI). Confecciona nóminas de personal por programa. Alimenta plataforma MINSAL con dotación.</td>
+            <td><span class="actor-badge" style="background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3)">GESTIÓN PRESUPUESTARIA</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">Subdirectora AGDP DAP</span></td>
+            <td><b>Marjorie Almazábal</b></td>
+            <td>Aprueba la asignación de personal a cada PRAPS. Valida nóminas de dotación. Autoriza los montos de gasto por programa. Responsable de la discriminación presupuestaria entre programas.</td>
+            <td><span class="actor-badge" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)">APROBACIÓN</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">Referentes Técnicos Subdirección Médica DAP</span></td>
+            <td>Referentes por Programa PRAPS</td>
+            <td>Definen el número de personas a financiar por programa según objetivos sanitarios. Validan la nómina técnica de dotación. Respaldan la ejecución técnica del programa.</td>
+            <td><span class="actor-badge" style="background:rgba(6,182,212,0.15);color:var(--cyan);border:1px solid rgba(6,182,212,0.3)">VALIDACIÓN TÉCNICA</span></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name">Unid. Rendiciones Depto. Finanzas DAP SAF</span></td>
+            <td>Encargado/a Rendiciones DAP</td>
+            <td>Recepciona las rendiciones mensuales desde Unidad Control Presupuesto ST21. Sube y cuadra información en plataforma SISREC. Valida documentación técnica exigida.</td>
+            <td><span class="actor-badge" style="background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3)">RENDICIÓN</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ─── 3. DIAGRAMA DE FASES ─── -->
+    <section id="s3">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">Diagrama del Proceso por Carriles (Swimlane)</span>
+      </div>
+
+      <div class="diagram-wrap">
+        <div class="swimlane-container">
+
+          <!-- FASE BANNER -->
+          <div style="display:grid;grid-template-columns:180px repeat(3,1fr);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border);border-bottom:none;">
+            <div style="background:rgba(10,22,40,0.8);padding:8px 12px;color:var(--text-dim);border-right:1px solid var(--border)">Carriles / Actores</div>
+            <div class="phase-banner" style="color:var(--cyan);background:rgba(6,182,212,0.05);border-right:1px solid var(--border)">① Asignación y Formalización</div>
+            <div class="phase-banner" style="color:var(--accent);background:rgba(59,130,246,0.05);border-right:1px solid var(--border)">② Gestión Presupuestaria ST21</div>
+            <div class="phase-banner" style="color:var(--green);background:rgba(16,185,129,0.05)">③ Rendición y Cierre</div>
+          </div>
+
+          <!-- CARRIL: MINSAL -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(239,68,68,0.08);">
+              <div class="lane-icon">🏛️</div>
+              <div class="lane-name">MINSAL DIVAP</div>
+              <div class="lane-unit">Nivel Central</div>
+            </div>
+            <div class="lane-content" style="grid-column:2/5; background:rgba(239,68,68,0.03);">
+              <div class="node node-start" style="min-width:120px">
+                <div class="node-id">EV-00</div>
+                <div class="node-text">INICIO: Ley de Presupuesto promulgada</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-doc" style="min-width:150px">
+                <div class="node-id">A-01</div>
+                <div class="node-text">Resolución Exenta MINSAL: Distribución Recursos PRAPS por Servicio de Salud</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task" style="min-width:140px;border-color:var(--cyan)">
+                <div class="node-id">A-02</div>
+                <div class="node-text">Publicación Orientaciones Técnicas y Bases por Programa PRAPS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARRIL: SSMC / JURÍDICA -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(245,158,11,0.06);">
+              <div class="lane-icon">⚖️</div>
+              <div class="lane-name">SSMC Depto. Jurídica</div>
+              <div class="lane-unit">Servicio de Salud</div>
+            </div>
+            <div class="lane-content" style="background:rgba(245,158,11,0.02);">
+              <div class="node node-task" style="min-width:160px;border-color:var(--amber)">
+                <div class="node-id">B-01</div>
+                <div class="node-text">Recepción y Registro Resolución MINSAL en el SSMC</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-check" style="min-width:160px">
+                <div class="node-id">B-02</div>
+                <div class="node-text">Revisión jurídica de Resoluciones de Traspaso elaboradas por Subdep. Convenios</div>
+              </div>
+              <div class="arrow">→</div>
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:140px">
+                <div class="decision-box" style="min-width:140px">
+                  <div class="dq">❓ ¿Resolución conforme?</div>
+                  <div class="dyes">✔ SÍ → Visa y tramita firma</div>
+                  <div class="dno">✘ NO → Devuelve con observaciones</div>
+                </div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-doc" style="min-width:140px;border-color:var(--amber)">
+                <div class="node-id">B-03</div>
+                <div class="node-text">Resolución de Traspaso firmada y timbrada por Director SSMC</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARRIL: SUBDEP. CONVENIOS -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(59,130,246,0.06);">
+              <div class="lane-icon">📋</div>
+              <div class="lane-name">Subdep. Convenios DAP SAF</div>
+              <div class="lane-unit">L. Nahuel · A. Durán</div>
+            </div>
+            <div class="lane-content" style="background:rgba(59,130,246,0.02);">
+              <div class="node node-task">
+                <div class="node-id">C-01</div>
+                <div class="node-text">Solicita nómina de personal a AGDP por programa PRAPS</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task">
+                <div class="node-id">C-02</div>
+                <div class="node-text">Recibe nómina aprobada con gasto clasificado por haber</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-doc" style="min-width:150px">
+                <div class="node-id">C-03</div>
+                <div class="node-text">Elabora Resolución de Traspaso de Recursos (1 por cada PRAPS)</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task" style="min-width:140px">
+                <div class="node-id">C-04</div>
+                <div class="node-text">Envía a Jurídica SSMC para visa · Gestiona correcciones si aplica</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-system" style="min-width:140px">
+                <div class="node-id">C-05</div>
+                <div class="node-text">Registra traspaso en SIGFE · Genera CDP (Certificado Disponib. Presupuestaria)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARRIL: AGDP -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(139,92,246,0.06);">
+              <div class="lane-icon">👥</div>
+              <div class="lane-name">Unid. Control Presupuesto ST21 AGDP</div>
+              <div class="lane-unit">A. Vergara · M. Almazábal</div>
+            </div>
+            <div class="lane-content" style="background:rgba(139,92,246,0.02);">
+              <div class="node node-task" style="border-color:var(--purple)">
+                <div class="node-id">D-01</div>
+                <div class="node-text">Coordina con Referentes Técnicos el N° de personas por programa</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task" style="border-color:var(--purple)">
+                <div class="node-id">D-02</div>
+                <div class="node-text">Determina gasto anual: clasifica haberes por persona y programa</div>
+              </div>
+              <div class="arrow">→</div>
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:180px">
+                <div class="node node-task" style="border-color:var(--green);background:linear-gradient(135deg,#052e16,#14532d);font-size:10px;">
+                  <div class="node-id">D-03a</div>
+                  <div class="node-text">Haber Neto (Permanente) → Carga PRAPS correspondiente</div>
+                </div>
+                <div class="node node-task" style="border-color:var(--amber);background:linear-gradient(135deg,#2d1d00,#451a03);font-size:10px;">
+                  <div class="node-id">D-03b</div>
+                  <div class="node-text">Haberes No Permanentes → Carga PPI</div>
+                </div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-check" style="border-color:var(--purple)">
+                <div class="node-id">D-04</div>
+                <div class="node-text">Subdirectora AGDP aprueba asignación por programa (M. Almazábal)</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-doc" style="border-color:var(--purple);min-width:150px">
+                <div class="node-id">D-05</div>
+                <div class="node-text">Nómina aprobada con gasto específico por persona/programa/haber</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-system" style="min-width:140px">
+                <div class="node-id">D-06</div>
+                <div class="node-text">Ingresa dotación en plataforma MINSAL (respaldo presupuestario)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARRIL: REFERENTES TÉCNICOS -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(6,182,212,0.06);">
+              <div class="lane-icon">🩺</div>
+              <div class="lane-name">Referentes Técnicos</div>
+              <div class="lane-unit">Subdirección Médica DAP</div>
+            </div>
+            <div class="lane-content" style="background:rgba(6,182,212,0.02);">
+              <div class="node node-task" style="border-color:var(--cyan)">
+                <div class="node-id">E-01</div>
+                <div class="node-text">Valida con AGDP número y perfil de personas a financiar por programa</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-check" style="border-color:var(--cyan)">
+                <div class="node-id">E-02</div>
+                <div class="node-text">Certifica coherencia entre dotación y objetivos técnicos del PRAPS</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task" style="border-color:var(--cyan)">
+                <div class="node-id">E-03</div>
+                <div class="node-text">Coordina ajustes si existe desfase entre presupuesto y necesidad técnica</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARRIL: FINANZAS / RENDICIONES -->
+          <div class="swimlane">
+            <div class="lane-label" style="background:rgba(16,185,129,0.06);">
+              <div class="lane-icon">💰</div>
+              <div class="lane-name">Unid. Rendiciones Depto. Finanzas DAP SAF</div>
+              <div class="lane-unit">Encargado/a Rendiciones</div>
+            </div>
+            <div class="lane-content" style="background:rgba(16,185,129,0.02);">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:160px">
+                <div class="node node-task" style="border-color:var(--green);font-size:10px">
+                  <div class="node-id">F-01</div>
+                  <div class="node-text">Recibe transferencias genéricas del SSMC para pago de remuneraciones (antes de formalizar resoluciones)</div>
+                </div>
+                <div style="font-size:9px;color:var(--text-dim);padding:2px 6px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:4px;">⚠️ Imputación extracontable a PRAPS mientras se formalizan documentos</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-task" style="border-color:var(--green)">
+                <div class="node-id">F-02</div>
+                <div class="node-text">Recibe rendición mensual desde Unid. Control Presupuesto ST21 AGDP (mes vencido)</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-check" style="border-color:var(--green)">
+                <div class="node-id">F-03</div>
+                <div class="node-text">Verifica integridad documental: nóminas, liquidaciones, resoluciones de traspaso vigentes</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-system" style="min-width:150px">
+                <div class="node-id">F-04</div>
+                <div class="node-text">Ingresa y valida rendición en plataforma SISREC (Sist. Rendición Electrónica de Cuentas)</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-check" style="border-color:var(--cyan)">
+                <div class="node-id">F-05</div>
+                <div class="node-text">SSMC/MINSAL valida rendición en SISREC · Emite observaciones si aplica</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="node node-end" style="min-width:110px">
+                <div class="node-id">EV-FIN</div>
+                <div class="node-text">Rendición aprobada y cerrada en SISREC</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /swimlane-container -->
+      </div><!-- /diagram-wrap -->
+    </section>
+
+    <!-- ─── 4. DESCRIPCIÓN NARRATIVA ─── -->
+    <section id="s4">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <span class="section-title">Descripción Detallada del Proceso</span>
+      </div>
+
+      <div class="vflow">
+
+        <!-- FASE 1 -->
+        <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:12px 16px;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan)">⚡ FASE 1 — ASIGNACIÓN Y FORMALIZACIÓN PRESUPUESTARIA</span>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">A01</div>
+          <div class="step-content">
+            <div class="step-title">Resolución de Distribución MINSAL → Llegada de Recursos al SSMC</div>
+            <div class="step-desc">El Ministerio de Salud, a través de la DIVAP, emite anualmente una <b>Resolución Exenta de Distribución de Recursos PRAPS</b> que asigna montos específicos a cada Servicio de Salud del país. Esta resolución desagrega los recursos por componente programático (IRA, ERA, SAPU, Odontológico, etc.) e instruye el mecanismo de traspaso. El SSMC toma conocimiento formal y activa el proceso de presupuestación interna en la DAP SSMC.</div>
+            <div class="step-tags">
+              <span class="tag tag-doc">Res. Exenta MINSAL</span>
+              <span class="tag tag-norm">Ley de Presupuesto</span>
+              <span class="tag tag-sys">SIGFE</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Documentos</div>
+            · Resolución Exenta MINSAL DIVAP<br>· Orientaciones Técnicas por Programa<br>· Bases PRAPS año vigente
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">C01</div>
+          <div class="step-content">
+            <div class="step-title">Solicitud de Nómina de Personal — Subdep. Convenios a AGDP</div>
+            <div class="step-desc">Liliana Nahuel y/o Alex Durán (Subdep. Convenios, DAP SAF) formalizan una solicitud a la Unidad de Control de Presupuesto ST21 de la AGDP DAP para que Alexis Vergara prepare la nómina de personal que será financiado con cargo a los diferentes programas PRAPS durante el período. Esta solicitud incluye el detalle de los programas, los montos asignados por resolución MINSAL y los plazos para confección de resoluciones de traspaso.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">L. Nahuel / A. Durán</span>
+              <span class="tag tag-doc">Oficio interno</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Inputs</div>
+            · Res. distribución MINSAL<br>· Dotación histórica<br>· Orientaciones técnicas PRAPS
+          </div>
+        </div>
+
+        <!-- FASE 2 -->
+        <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:12px 16px;margin-bottom:8px;margin-top:16px;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent)">⚡ FASE 2 — GESTIÓN PRESUPUESTARIA SUBTÍTULO 21</span>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">D01</div>
+          <div class="step-content">
+            <div class="step-title">Coordinación con Referentes Técnicos — Número de Personas por Programa</div>
+            <div class="step-desc">Alexis Vergara (Unid. Control Presupuesto ST21, AGDP DAP) se coordina con los Referentes Técnicos de la Subdirección Médica DAP para determinar el número total de personas a financiar con cargo a cada programa PRAPS. Los referentes técnicos validan la coherencia entre la dotación propuesta y los objetivos de cada componente programático (metas sanitarias, coberturas, tipos de prestaciones).</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">A. Vergara</span>
+              <span class="tag tag-resp">Referentes Técnicos</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Criterios</div>
+            · Población objetivo del programa<br>· Metas sanitarias vigentes<br>· Historial de dotación<br>· Disponibilidad presupuestaria
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">D02</div>
+          <div class="step-content">
+            <div class="step-title">Determinación del Gasto Específico y Clasificación de Haberes</div>
+            <div class="step-desc">Para cada persona contratada con cargo a un programa PRAPS, Alexis Vergara realiza el ejercicio de determinación del gasto anual específico, clasificando sus haberes según la siguiente regla:<br><br>
+            <b style="color:var(--green)">→ Haber Neto (Haberes Permanentes):</b> Se carga al PRAPS correspondiente. Incluye sueldo base, asignaciones permanentes y bonificaciones fijas definidas en el contrato.<br><br>
+            <b style="color:var(--amber)">→ Haberes No Permanentes:</b> Se cargan al PPI (Programa de Pago Individual). Incluyen horas extraordinarias, reemplazos, bonos variables y otros emolumentos no fijos.<br><br>
+            Este ejercicio se realiza persona a persona y programa a programa, generando un detalle de gasto anual que sustenta las resoluciones de traspaso.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">A. Vergara</span>
+              <span class="tag tag-norm">Estatuto APS Ley 19.378</span>
+              <span class="tag tag-doc">Planilla de determinación de gasto</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Clasificación</div>
+            <span style="color:var(--green)">PRAPS:</span> Haber Neto<br>
+            <span style="color:var(--amber)">PPI:</span> H. No Permanentes<br><br>
+            <div class="aside-title">Sistema</div>
+            · SIRH (remuneraciones)<br>· Planillas Excel control interno
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">D04</div>
+          <div class="step-content">
+            <div class="step-title">Aprobación de la Asignación de Personal por Programa — Subdirectora AGDP</div>
+            <div class="step-desc">Marjorie Almazábal (Subdirectora AGDP DAP SSMC) revisa y aprueba formalmente la asignación de personal a cada PRAPS. <b>La discriminación respecto a la asignación del personal a los distintos PRAPS es responsabilidad exclusiva de la Subdirección de Gestión y Desarrollo de Personas DAP SSMC.</b> Una vez aprobada, se genera la nómina oficial que respalda las resoluciones de traspaso.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">M. Almazábal</span>
+              <span class="tag tag-ctrl">Control crítico</span>
+              <span class="tag tag-doc">Nómina aprobada</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Responsabilidad</div>
+            La asignación de personal a cada PRAPS es responsabilidad de la Subdirección AGDP DAP SSMC (M. Almazábal)
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">D06</div>
+          <div class="step-content">
+            <div class="step-title">Respaldo en Plataforma MINSAL — Nómina por Programa</div>
+            <div class="step-desc">Alexis Vergara ingresa en la plataforma MINSAL el presupuesto respaldado, incluyendo la nómina de personal asociada a cada programa PRAPS. Esta información queda disponible para el control y seguimiento por parte del nivel central (DIVAP), constituyendo el respaldo oficial del gasto presupuestado en ST21 con cargo a los programas.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">A. Vergara</span>
+              <span class="tag tag-sys">Plataforma MINSAL</span>
+              <span class="tag tag-doc">Presupuesto respaldado</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Output</div>
+            · Presupuesto ST21 respaldado en plataforma MINSAL<br>· Nómina por programa cargada
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">C03</div>
+          <div class="step-content">
+            <div class="step-title">Elaboración de Resoluciones de Traspaso de Recursos (una por PRAPS)</div>
+            <div class="step-desc">Con la nómina aprobada por AGDP, Liliana Nahuel y Alex Durán elaboran las <b>Resoluciones de Traspaso de Recursos</b> desde el SSMC a la DAP SSMC. Cada resolución corresponde a un PRAPS específico. Las resoluciones consignan: monto total del traspaso, período de vigencia, nómina de personal financiado (como anexo), clasificación presupuestaria (ST21), y las obligaciones de rendición. Cada una de estas resoluciones constituye un PRAPS individualizado.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">L. Nahuel / A. Durán</span>
+              <span class="tag tag-doc">Resolución de Traspaso</span>
+              <span class="tag tag-norm">Ley 19.880</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Documentos</div>
+            · Proyecto Resolución Traspaso<br>· Anexo: Nómina personal<br>· Informe de gasto por haber<br>· CDP SIGFE
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">B02</div>
+          <div class="step-content">
+            <div class="step-title">Revisión Jurídica y Firma de Resoluciones por el SSMC</div>
+            <div class="step-desc">Las Resoluciones de Traspaso elaboradas por el Subdep. Convenios son remitidas al Departamento Jurídico del SSMC para su revisión y visa legal. Jurídica verifica la correcta fundamentación normativa, coherencia con la resolución MINSAL de distribución, y los aspectos formales. Una vez aprobadas, las resoluciones son firmadas por el Director o autoridad competente del SSMC y devueltas para su tramitación.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">Depto. Jurídica SSMC</span>
+              <span class="tag tag-ctrl">Control jurídico</span>
+              <span class="tag tag-doc">Resolución Firmada</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Compuerta</div>
+            Si hay observaciones jurídicas, Subdep. Convenios corrige y reenvía antes de continuar
+          </div>
+        </div>
+
+        <!-- FASE 3 -->
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:12px 16px;margin-bottom:8px;margin-top:16px;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green)">⚡ FASE 3 — EJECUCIÓN FINANCIERA Y RENDICIÓN</span>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">F01</div>
+          <div class="step-content">
+            <div class="step-title">Financiamiento Transitorio — Transferencias Genéricas para Pago de Remuneraciones</div>
+            <div class="step-desc">Desde el punto de vista contable-financiero, los recursos para pagar las remuneraciones <b>antes de formalizados los documentos de transferencia</b> son financiados sin distinción por unidad demandante. Se generan transferencias genéricas para el financiamiento del pago de remuneraciones. El modelo actual imputa los gastos a los programas de salud de forma <b>extracontable</b> a los distintos PRAPS, hasta que las resoluciones de traspaso estén debidamente formalizadas. Esta situación debe ser regularizada en el menor tiempo posible para asegurar la correcta imputación contable.</div>
+            <div class="step-tags">
+              <span class="tag tag-norm">Modelo vigente</span>
+              <span class="tag tag-ctrl">Riesgo de control</span>
+              <span class="tag tag-sys">SIGFE</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">⚠️ Punto Crítico</div>
+            Imputación extracontable es un riesgo de control que debe regularizarse a la brevedad con las resoluciones de traspaso
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">F02</div>
+          <div class="step-content">
+            <div class="step-title">Recepción de Rendición Mensual — Unidad Rendiciones recibe desde Control Presupuesto ST21</div>
+            <div class="step-desc">La Unidad de Rendiciones del Departamento de Finanzas (DAP SAF) recibe mensualmente la rendición del mes vencido, proveniente de la Unidad de Control de Presupuesto ST21 (AGDP DAP). Esta rendición incluye el detalle de gastos ejecutados en remuneraciones, desagregado por persona, programa PRAPS y tipo de haber.</div>
+            <div class="step-tags">
+              <span class="tag tag-resp">Unidad Rendiciones</span>
+              <span class="tag tag-doc">Rendición mensual</span>
+              <span class="tag tag-norm">Plazo: mensual</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Contenido rendición</div>
+            · Nómina ejecutada por programa<br>· Liquidaciones de sueldo<br>· Imputación por haber<br>· Comprobantes de pago
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">F03</div>
+          <div class="step-content">
+            <div class="step-title">Verificación de Requisitos Técnicos para Rendición</div>
+            <div class="step-desc">La Unidad de Rendiciones verifica la integridad y completitud de la documentación de respaldo de acuerdo a los requerimientos técnicos exigidos por la plataforma SISREC (Sistema de Rendición Electrónica de Cuentas) y las orientaciones técnicas de cada PRAPS. Se verifica coherencia entre montos rendidos, resoluciones de traspaso vigentes y nóminas aprobadas por AGDP.</div>
+            <div class="step-tags">
+              <span class="tag tag-ctrl">Control de calidad</span>
+              <span class="tag tag-sys">SISREC</span>
+              <span class="tag tag-doc">Checklist rendición</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Requisitos SISREC</div>
+            · Liquidaciones de sueldo<br>· Resolución traspaso vigente<br>· Nómina aprobada AGDP<br>· Comprobantes SIGFE<br>· Informe ejecución técnica
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">F04</div>
+          <div class="step-content">
+            <div class="step-title">Ingreso y Validación en Plataforma SISREC</div>
+            <div class="step-desc">La Unidad de Rendiciones ingresa la información de rendición en la <b>Plataforma SISREC (Sistema de Rendición Electrónica de Cuentas)</b> del nivel central. Se adjuntan todos los documentos de respaldo digitalizados, se completan los formularios por programa y se verifica que los montos cuadren con los traspasos formalizados. La plataforma emite validaciones automáticas y alertas por inconsistencias.</div>
+            <div class="step-tags">
+              <span class="tag tag-sys">SISREC</span>
+              <span class="tag tag-resp">Unidad Rendiciones</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Plataforma</div>
+            <b style="color:var(--cyan)">SISREC</b><br>Sistema de Rendición Electrónica de Cuentas<br>rendicioncuentas.cl
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="step-num">F05</div>
+          <div class="step-content">
+            <div class="step-title">Validación por SSMC / MINSAL y Cierre de Rendición</div>
+            <div class="step-desc">El SSMC y/o MINSAL (a través del referente PRAPS respectivo) revisan la rendición ingresada en SISREC. Pueden emitir observaciones que la DAP SSMC debe subsanar en plazo. Una vez aprobada la rendición sin observaciones, se genera el acta de cierre en SISREC, constituyendo el respaldo oficial de la ejecución presupuestaria ST21 con cargo a los programas PRAPS del período.</div>
+            <div class="step-tags">
+              <span class="tag tag-ctrl">Hito de cierre</span>
+              <span class="tag tag-sys">SISREC</span>
+              <span class="tag tag-doc">Acta de cierre</span>
+            </div>
+          </div>
+          <div class="step-aside">
+            <div class="aside-title">Output Final</div>
+            · Rendición aprobada en SISREC<br>· Acta de cierre<br>· Informe de ejecución ST21<br>· Saldo disponible actualizado
+          </div>
+        </div>
+
+      </div><!-- /vflow -->
+    </section>
+
+    <!-- ─── 5. PUNTOS DE CONTROL ─── -->
+    <section id="s5">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <span class="section-title">Puntos de Control y Compuertas de Decisión</span>
+      </div>
+      <table class="actors-table">
+        <thead>
+          <tr><th>#</th><th>Punto de Control</th><th>Responsable</th><th>Criterio de aprobación</th><th>Acción si falla</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">PC-01</span></td>
+            <td>Validación técnica de dotación por Referentes Médicos</td>
+            <td>Referentes Técnicos Subdirección Médica DAP</td>
+            <td>Coherencia entre dotación propuesta y metas/coberturas del programa</td>
+            <td>Ajuste de nómina y nueva validación con referente</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">PC-02</span></td>
+            <td>Aprobación Subdirectora AGDP — Asignación personal por PRAPS</td>
+            <td>M. Almazábal (Subdirectora AGDP)</td>
+            <td>Nómina con gasto clasificado correctamente por haber (permanente/no permanente)</td>
+            <td>Corrección de clasificación por A. Vergara y nueva revisión</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">PC-03</span></td>
+            <td>Visa Jurídica Resolución de Traspaso</td>
+            <td>Depto. Jurídica SSMC</td>
+            <td>Resolución conforme a derecho, bien fundada, montos concordantes</td>
+            <td>Devolución con observaciones → Corrección por Subdep. Convenios</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">PC-04</span></td>
+            <td>Verificación integridad documental para rendición SISREC</td>
+            <td>Unidad Rendiciones DAP SAF</td>
+            <td>Documentos completos según checklist SISREC y orientaciones técnicas PRAPS</td>
+            <td>Solicitud de documentos faltantes a Unidad Control Presupuesto ST21</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">PC-05</span></td>
+            <td>Aprobación rendición en SISREC por SSMC/MINSAL</td>
+            <td>Referente PRAPS SSMC / DIVAP MINSAL</td>
+            <td>Montos rendidos coherentes con resolución traspaso; documentación completa</td>
+            <td>Subsanación de observaciones en plazos establecidos por SISREC</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ─── 6. RIESGOS ─── -->
+    <section id="s6">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <span class="section-title">Identificación de Riesgos y Controles Mitigadores</span>
+      </div>
+      <table class="risks-table">
+        <thead>
+          <tr><th>ID</th><th>Riesgo</th><th>Probabilidad</th><th>Impacto</th><th>Control Mitigador</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">R-01</span></td>
+            <td>Imputación extracontable prolongada antes de formalizar resoluciones de traspaso</td>
+            <td><span class="pill pill-high">ALTA</span></td>
+            <td><span class="pill pill-high">ALTO</span></td>
+            <td>Establecer plazo máximo de 30 días desde Resolución MINSAL para confección y firma de resoluciones de traspaso. Monitoreo mensual por Subdep. Convenios.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">R-02</span></td>
+            <td>Errores en clasificación de haberes (permanente/no permanente) que generan desvíos en imputación PRAPS/PPI</td>
+            <td><span class="pill pill-med">MEDIA</span></td>
+            <td><span class="pill pill-high">ALTO</span></td>
+            <td>Doble revisión: A. Vergara elabora, M. Almazábal aprueba. Uso de planilla estandarizada con fórmulas automáticas de clasificación.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">R-03</span></td>
+            <td>Rechazo de rendición en SISREC por documentación incompleta o fuera de plazo</td>
+            <td><span class="pill pill-med">MEDIA</span></td>
+            <td><span class="pill pill-high">ALTO</span></td>
+            <td>Checklist de verificación previo al ingreso a SISREC. Calendario de plazos de rendición acordado entre Unidad Rendiciones y Control Presupuesto ST21.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Nuevo',monospace;color:var(--accent)">R-04</span></td>
+            <td>Desfase entre dotación aprobada por AGDP y necesidades técnicas del programa (sobrecarga o subcobertura)</td>
+            <td><span class="pill pill-med">MEDIA</span></td>
+            <td><span class="pill pill-med">MEDIO</span></td>
+            <td>Coordinación formal y documentada entre A. Vergara y Referentes Técnicos antes de cerrar nómina. Reunión de validación con acta.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">R-05</span></td>
+            <td>Demoras en visa jurídica que retrasan formalización de traspasos</td>
+            <td><span class="pill pill-low">BAJA</span></td>
+            <td><span class="pill pill-med">MEDIO</span></td>
+            <td>Planificación anticipada con calendario de elaboración de resoluciones. Envío a Jurídica con al menos 15 días hábiles de anticipación.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ─── 7. INDICADORES ─── -->
+    <section id="s7">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <span class="section-title">Indicadores de Desempeño del Proceso</span>
+      </div>
+      <div class="indicators-grid">
+        <div class="ind-card">
+          <div class="ind-num">IND-01</div>
+          <div class="ind-name">Oportunidad en Formalización de Traspasos</div>
+          <div class="ind-formula">N° Resoluciones firmadas ≤ 30 días / Total Resoluciones × 100</div>
+          <div class="ind-meta"><b>Meta:</b> ≥ 90% · <b>Frecuencia:</b> Trimestral · <b>Responsable:</b> Subdep. Convenios</div>
+        </div>
+        <div class="ind-card">
+          <div class="ind-num">IND-02</div>
+          <div class="ind-name">Tasa de Rendiciones Aprobadas sin Observaciones</div>
+          <div class="ind-formula">Rendiciones aprobadas 1ª vez / Total rendiciones ingresadas × 100</div>
+          <div class="ind-meta"><b>Meta:</b> ≥ 85% · <b>Frecuencia:</b> Mensual · <b>Responsable:</b> Unidad Rendiciones</div>
+        </div>
+        <div class="ind-card">
+          <div class="ind-num">IND-03</div>
+          <div class="ind-name">Cobertura de Dotación respaldada en Plataforma MINSAL</div>
+          <div class="ind-formula">N° personas ingresadas en plataforma / N° personas nómina aprobada × 100</div>
+          <div class="ind-meta"><b>Meta:</b> 100% · <b>Frecuencia:</b> Semestral · <b>Responsable:</b> A. Vergara</div>
+        </div>
+        <div class="ind-card">
+          <div class="ind-num">IND-04</div>
+          <div class="ind-name">Ejecución Presupuestaria ST21 con cargo a PRAPS</div>
+          <div class="ind-formula">Gasto ejecutado ST21 PRAPS / Presupuesto asignado ST21 PRAPS × 100</div>
+          <div class="ind-meta"><b>Meta:</b> 95% – 100% · <b>Frecuencia:</b> Mensual · <b>Responsable:</b> Unidad Control ST21 AGDP</div>
+        </div>
+        <div class="ind-card">
+          <div class="ind-num">IND-05</div>
+          <div class="ind-name">Plazo de Rendición Mensual (días hábiles desde cierre de mes)</div>
+          <div class="ind-formula">Fecha ingreso SISREC – Fecha cierre mes contable</div>
+          <div class="ind-meta"><b>Meta:</b> ≤ 15 días hábiles · <b>Frecuencia:</b> Mensual · <b>Responsable:</b> Unidad Rendiciones</div>
+        </div>
+        <div class="ind-card">
+          <div class="ind-num">IND-06</div>
+          <div class="ind-name">Exactitud en Clasificación de Haberes PRAPS / PPI</div>
+          <div class="ind-formula">Registros correctamente clasificados / Total registros revisados × 100</div>
+          <div class="ind-meta"><b>Meta:</b> 100% · <b>Frecuencia:</b> Semestral · <b>Responsable:</b> M. Almazábal / A. Vergara</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 8. REVISIONES ─── -->
+    <section id="s8">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <span class="section-title">Historial de Revisiones</span>
+      </div>
+      <table class="rev-table">
+        <thead>
+          <tr><th>Versión</th><th>Fecha</th><th>Descripción del Cambio</th><th>Elaboró</th><th>Revisó</th><th>Aprobó</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent)">1.0</td>
+            <td>Marzo 2025</td>
+            <td>Versión inicial del procedimiento documentado. Modelamiento completo del proceso de asignación, formalización y rendición de recursos PRAPS ST21 DAP SSMC.</td>
+            <td>Subdep. Convenios DAP SAF</td>
+            <td>Depto. Jurídica SSMC</td>
+            <td>Subdirectora AGDP M. Almazábal</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px;padding:16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text-dim);">
+        <b style="color:var(--white)">Nota de aplicación:</b> Este procedimiento es de cumplimiento obligatorio para todas las unidades de la DAP SSMC involucradas en la gestión de recursos PRAPS ST21. Cualquier desviación del procedimiento debe ser documentada y comunicada al responsable del proceso. La revisión de este documento se realizará anualmente o cuando existan cambios normativos relevantes en la operatoria de los programas PRAPS o en las instrucciones de rendición del MINSAL.
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</div><!-- /main-wrap -->
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <span>PRO-SAF-001 v1.0 · Dirección de Atención Primaria DAP SSMC · Sistema Integrado de Calidad</span>
+  <span>Proceso: Gestión Presupuestaria y Rendición PRAPS ST21 · Uso Interno</span>
+  <span>© 2025 DAP SSMC · Todos los derechos reservados</span>
+</div>
+
+<script>
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.target.closest('.nav-item').classList.add('active');
+}
+</script>
+
+</body>
+</html>
