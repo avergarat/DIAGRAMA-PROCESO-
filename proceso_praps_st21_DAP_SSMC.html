@@ -541,14 +541,14 @@
   <nav class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-title">Navegación</div>
-      <div class="nav-item active" onclick="scrollTo('s1')"><div class="dot" style="background:var(--cyan)"></div>1. Objeto y Alcance</div>
-      <div class="nav-item" onclick="scrollTo('s2')"><div class="dot" style="background:var(--accent)"></div>2. Actores y Responsables</div>
-      <div class="nav-item" onclick="scrollTo('s3')"><div class="dot" style="background:var(--purple)"></div>3. Diagrama de Fases</div>
-      <div class="nav-item" onclick="scrollTo('s4')"><div class="dot" style="background:var(--green)"></div>4. Descripción del Proceso</div>
-      <div class="nav-item" onclick="scrollTo('s5')"><div class="dot" style="background:var(--amber)"></div>5. Puntos de Control</div>
-      <div class="nav-item" onclick="scrollTo('s6')"><div class="dot" style="background:var(--red)"></div>6. Riesgos y Controles</div>
-      <div class="nav-item" onclick="scrollTo('s7')"><div class="dot" style="background:var(--cyan)"></div>7. Indicadores</div>
-      <div class="nav-item" onclick="scrollTo('s8')"><div class="dot" style="background:var(--text-dim)"></div>8. Historial de Revisiones</div>
+      <div class="nav-item active" onclick="navegarA('s1',this)"><div class="dot" style="background:var(--cyan)"></div>1. Objeto y Alcance</div>
+      <div class="nav-item" onclick="navegarA('s2',this)"><div class="dot" style="background:var(--accent)"></div>2. Actores y Responsables</div>
+      <div class="nav-item" onclick="navegarA('s3',this)"><div class="dot" style="background:var(--purple)"></div>3. Diagrama de Fases</div>
+      <div class="nav-item" onclick="navegarA('s4',this)"><div class="dot" style="background:var(--green)"></div>4. Descripción del Proceso</div>
+      <div class="nav-item" onclick="navegarA('s5',this)"><div class="dot" style="background:var(--amber)"></div>5. Puntos de Control</div>
+      <div class="nav-item" onclick="navegarA('s6',this)"><div class="dot" style="background:var(--red)"></div>6. Riesgos y Controles</div>
+      <div class="nav-item" onclick="navegarA('s7',this)"><div class="dot" style="background:var(--cyan)"></div>7. Indicadores</div>
+      <div class="nav-item" onclick="navegarA('s8',this)"><div class="dot" style="background:var(--text-dim)"></div>8. Historial de Revisiones</div>
     </div>
 
     <div class="sidebar-section">
@@ -1329,11 +1329,17 @@
 </div>
 
 <script>
-function scrollTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  event.target.closest('.nav-item').classList.add('active');
+function navegarA(id, el) {
+  var seccion = document.getElementById(id);
+  if (seccion) {
+    seccion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.querySelectorAll('.nav-item').forEach(function(n) {
+    n.classList.remove('active');
+  });
+  if (el) {
+    el.classList.add('active');
+  }
 }
 </script>
 
